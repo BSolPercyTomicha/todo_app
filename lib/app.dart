@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'features/todo/pages/tasks.page.dart';
+import 'features/task/pages/tasks.page.dart';
 import 'theme/presentation/bloc/theme.cubit.dart';
-import 'features/stastics/presentation/pages/statistics.page.dart';
+import 'features/task/pages/statistics.page.dart';
+import 'features/task/pages/task_create.page.dart';
 
 class MyTodoApp extends StatefulWidget {
   const MyTodoApp({super.key});
@@ -49,6 +50,9 @@ class _MyTodoAppState extends State<MyTodoApp> {
                 brightness: Brightness.dark,
               ),
             ),
+            routes: {
+              '/task/create': (context) => const TaskCreatePage(),
+            },
             home: Scaffold(
               appBar: _selectedIndex == 0
                   ? AppBar(
@@ -64,6 +68,18 @@ class _MyTodoAppState extends State<MyTodoApp> {
                     )
                   : null,
               body: _pages[_selectedIndex],
+              floatingActionButton: Builder(
+                builder: (context) {
+                  return FloatingActionButton.extended(
+                    icon: const Icon(Icons.add),
+                    label: const Text('Nueva Tarea'),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/task/create');
+                    },
+                    tooltip: 'Crear nueva tarea',
+                  );
+                }
+              ),
               bottomNavigationBar: NavigationBar(
                 selectedIndex: _selectedIndex,
                 onDestinationSelected: (index) {

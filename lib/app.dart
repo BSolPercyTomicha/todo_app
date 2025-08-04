@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'features/task/pages/tasks.page.dart';
 import 'theme/presentation/bloc/theme.cubit.dart';
-import 'features/task/pages/statistics.page.dart';
-import 'features/task/pages/task_create.page.dart';
+import 'features/task/presentation/pages/tasks.page.dart';
+import 'features/task/presentation/pages/statistics.page.dart';
+import 'features/task/presentation/pages/task_create.page.dart';
 
 class MyTodoApp extends StatefulWidget {
   const MyTodoApp({super.key});

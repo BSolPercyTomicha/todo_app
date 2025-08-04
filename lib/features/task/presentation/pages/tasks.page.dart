@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widget/task_filter_chips.widget.dart';
+import '../widgets/task_filter_chips.widget.dart';
 
 enum TaskFilter {
   pending('Pendientes'),
@@ -35,7 +35,7 @@ class _TasksPageState extends State<TasksPage> {
           selected: _filter,
           onChanged: _onFilterChanged,
         ),
-        Center(child: Text('Mis Tareas ${_filter.name}')),
+        Center(child: Text('Mis Tareas (${_filter.label})')),
       ],
     );
   }

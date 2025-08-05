@@ -43,10 +43,10 @@ flutter run
 > También puedes abrir el proyecto en tu IDE y presionar el botón Run ▶️.
 
 ## 🧪 Ejecutar Pruebas
-Para ejecutar un archivo de prueba específico (por ejemplo `test_widgets.dart`):
+Para ejecutar un archivo de prueba específico (por ejemplo `task_filter_chips_test.dart`):
 
 ```bash
-flutter test test/test_widgets.dart
+flutter test test/widgets/task_filter_chips_test.dart
 ```
 
 Para ejecutar todas las pruebas:

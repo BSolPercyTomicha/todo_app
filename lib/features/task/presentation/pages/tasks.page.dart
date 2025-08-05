@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/task.bloc.dart';
+import '../widgets/task_item.widget.dart';
 import '../widgets/task_filter_chips.widget.dart';
 
 enum TaskFilter {
   pending('Pendientes'),
   all('Todas'),
   completed('Completadas');
-  
+
   const TaskFilter(this.label);
   final String label;
 }
@@ -30,12 +33,46 @@ class _TasksPageState extends State<TasksPage> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(
+          height: 10,
+        ),
         TaskFilterChips(
           selected: _filter,
           onChanged: _onFilterChanged,
         ),
-        Center(child: Text('Mis Tareas (${_filter.label})')),
+        const SizedBox(
+          height: 10,
+        ),
+        const Divider(),
+        BlocBuilder<TaskBloc, TaskState>(
+          builder: (context, state) {
+            if (state.status == TaskStatus.success) {
+              if (state.tasks.isEmpty) {
+                return Column(
+                  children: [
+                    const SizedBox(
+                      height: 48.0,
+                    ),
+                    Center(
+                      child: Text(
+                        'No hay Tareas ${_filter != TaskFilter.all ? _filter.label : ''}',
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return SingleChildScrollView(
+                child: Column(
+                  children:
+                      state.tasks.map((task) => TaskItem(task: task)).toList(),
+                ),
+              );
+            }
+            return const CircularProgressIndicator();
+          },
+        )
       ],
     );
   }

@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:todo_app/di.dart';
 import 'package:todo_app/app.dart';
+import 'package:todo_app/theme/presentation/bloc/theme.cubit.dart';
+import 'package:todo_app/features/task/presentation/bloc/task.bloc.dart';
 import 'package:todo_app/features/task/presentation/pages/tasks.page.dart';
 
 void main() {
+  setUp(
+    () {
+      getIt.reset();
+      setupDependencies();
+    },
+  );
+
   group('TaskFilterChips Widget Tests', () {
     late Widget testWidget;
 
     setUp(() {
-      testWidget = const MyTodoApp();
+      testWidget = MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => getIt<ThemeCubit>()),
+          BlocProvider(create: (_) => getIt<TaskBloc>()..add(GetTasks())),
+        ],
+        child: const MyTodoApp(),
+      );
     });
 
     testWidgets('Debería mostrar tres chips: Todas, Pendientes y Completadas',
@@ -27,8 +44,11 @@ void main() {
       final selectedChip = find.widgetWithText(Chip, 'Pendientes').first;
       final Chip chipWidget = tester.widget(selectedChip);
 
-      expect(chipWidget.backgroundColor,
-          equals(Theme.of(tester.element(find.text('Pendientes'))).colorScheme.primaryContainer));
+      expect(
+          chipWidget.backgroundColor,
+          equals(Theme.of(tester.element(find.text('Pendientes')))
+              .colorScheme
+              .primaryContainer));
     });
 
     testWidgets('No debería resaltar los chips no seleccionados',
@@ -45,9 +65,10 @@ void main() {
       expect(completedChipWidget.backgroundColor, isNull);
     });
 
-    testWidgets('Al tocar el chip "Todas", debería actualizar el estado y resaltarlo',
-    (WidgetTester tester) async {
-      await tester.pumpWidget(const MyTodoApp());
+    testWidgets(
+        'Al tocar el chip "Todas", debería actualizar el estado y resaltarlo',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(testWidget);
       await tester.pumpAndSettle();
 
       final allChipKey = find.byKey(ValueKey('chip-${TaskFilter.all}'));
@@ -57,8 +78,11 @@ void main() {
       final selectedChip = find.widgetWithText(Chip, 'Todas').first;
       final Chip chipWidget = tester.widget(selectedChip);
 
-      expect(chipWidget.backgroundColor,
-          equals(Theme.of(tester.element(find.text('Todas'))).colorScheme.primaryContainer));
+      expect(
+          chipWidget.backgroundColor,
+          equals(Theme.of(tester.element(find.text('Todas')))
+              .colorScheme
+              .primaryContainer));
     });
   });
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/task.bloc.dart';
 import '../widgets/task_item.widget.dart';
 import '../widgets/task_filter_chips.widget.dart';
+import '../widgets/statistics_preview.widget.dart';
 
 enum TaskFilter {
   pending('Pendientes'),
@@ -42,6 +43,14 @@ class _TasksPageState extends State<TasksPage> {
           selected: _filter,
           onChanged: _onFilterChanged,
         ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Divider(),
+        const SizedBox(
+          height: 10,
+        ),
+        const StatisticsPreview(),
         const SizedBox(
           height: 10,
         ),

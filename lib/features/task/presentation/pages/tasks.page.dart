@@ -79,7 +79,10 @@ class _TasksPageState extends State<TasksPage> {
                 ),
               );
             }
-            return const CircularProgressIndicator();
+            return const Padding(
+              padding: EdgeInsets.only(top: 36.0),
+              child: Center(child: CircularProgressIndicator()),
+            );
           },
         )
       ],

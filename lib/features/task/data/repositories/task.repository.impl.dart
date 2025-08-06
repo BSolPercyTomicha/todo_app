@@ -8,6 +8,11 @@ class TaskRepositoryImpl implements TaskRepository {
   TaskRepositoryImpl(this._datasource);
 
   @override
+  Future<void> deleteTask(int taskId) async {
+    return await _datasource.deleteTask(taskId);
+  }
+
+  @override
   Future<List<TaskEntity>> getTasks() async {
     return await _datasource.getTasks();
   }

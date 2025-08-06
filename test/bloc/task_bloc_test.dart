@@ -3,6 +3,18 @@ import 'package:todo_app/features/task/domain/entities/task.entity.dart';
 import 'package:todo_app/features/task/presentation/bloc/task.bloc.dart';
 import 'package:todo_app/features/task/presentation/pages/tasks.page.dart';
 import 'package:todo_app/features/task/domain/usecases/get_tasks.usecase.dart';
+import 'package:todo_app/features/task/domain/usecases/delete_task.usecase.dart';
+
+class FakeDeleteTaskUseCase implements DeleteTaskUseCase {
+  List<TaskEntity> tasksToReturn = [];
+  Exception? errorToThrow;
+
+  @override
+  Future<void> call(int taskId) async {
+    if (errorToThrow != null) throw errorToThrow!;
+    Future.value(tasksToReturn);
+  }
+}
 
 class FakeGetTasksUseCase implements GetTasksUseCase {
   List<TaskEntity> tasksToReturn = [];
@@ -21,6 +33,7 @@ void main() {
     () {
       late TaskBloc bloc;
       late FakeGetTasksUseCase fakeGetTasksUseCase;
+      late FakeDeleteTaskUseCase fakeDeleteTaskUseCase;
 
       final tTask1 = TaskEntity(
         id: 1,
@@ -44,7 +57,11 @@ void main() {
 
       setUp(() {
         fakeGetTasksUseCase = FakeGetTasksUseCase();
-        bloc = TaskBloc(fakeGetTasksUseCase);
+        fakeDeleteTaskUseCase = FakeDeleteTaskUseCase();
+        bloc = TaskBloc(
+          fakeGetTasksUseCase,
+          fakeDeleteTaskUseCase,
+        );
       });
 
       tearDown(() {

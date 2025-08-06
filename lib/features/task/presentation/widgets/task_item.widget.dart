@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/task.bloc.dart';
 import '../../domain/entities/task.entity.dart';
 
 class TaskItem extends StatelessWidget {
@@ -42,7 +44,9 @@ class TaskItem extends StatelessWidget {
               icon: const Icon(Icons.edit),
             ),
             IconButton.filledTonal(
-              onPressed: () {},
+              onPressed: () {
+                context.read<TaskBloc>().add(DeleteTask(task.id!));
+              },
               icon: const Icon(Icons.delete),
             ),
           ],

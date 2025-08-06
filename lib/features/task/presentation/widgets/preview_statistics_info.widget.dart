@@ -55,7 +55,9 @@ class PreviewStatisticsInfo extends StatelessWidget {
                 : MainAxisAlignment.center,
             children: [
               Text(
-                completedTasks > 0 ? 'Completadas ($completedTasks)' : '',
+                completedTasks > 0
+                    ? 'Completadas (${completedTasks == totalTasks ? '$completedTasks / $totalTasks' : completedTasks})'
+                    : '',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),

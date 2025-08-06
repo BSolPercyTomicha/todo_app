@@ -30,7 +30,7 @@ void main() {
       );
 
       expect(find.text('100 %'), findsOneWidget);
-      expect(find.text('Completadas (10)'), findsOneWidget);
+      expect(find.text('Completadas (10 / 10)'), findsOneWidget);
       expect(find.textContaining('Pendientes'), findsNothing);
     });
 

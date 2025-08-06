@@ -60,13 +60,23 @@ flutter test
 lib/
 ├── features/
 │   └── task/
+│       ├── data/
+│       │   ├── datasources/
+│       │   ├── models/
+│       │   └── repositories/
+│       ├── domain/
+│       │   ├── entities/
+│       │   ├── repositories/
+│       │   └── usecases/
 │       ├── presentation/
+│       │   ├── bloc/
 │       │   ├── pages/
 │       │   └── widgets/
 ├── theme/
 │   └── presentation/
 │       └── bloc/
 └── app.dart
+└── di.dart
 └── main.dart
 ```
 ## 🎨 Funcionalidades

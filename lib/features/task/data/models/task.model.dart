@@ -9,4 +9,15 @@ class TaskModel extends TaskEntity {
     required super.isCompleted,
     required super.assignedUser,
   });
+
+  factory TaskModel.fromEntity(TaskEntity entity) {
+    return TaskModel(
+      id: entity.id,
+      title: entity.title,
+      description: entity.description,
+      tags: entity.tags,
+      isCompleted: entity.isCompleted,
+      assignedUser: entity.assignedUser,
+    );
+  }
 }

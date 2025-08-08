@@ -1,6 +1,7 @@
 import '../../models/task.model.dart';
 
 abstract class TaskDataSource {
+  Future<void> createTask(TaskModel task);
   Future<void> deleteTask(int taskId);
   Future<List<TaskModel>> getTasks();
 }
@@ -40,6 +41,11 @@ class TaskTemporalDataSourceImpl implements TaskDataSource {
       assignedUser: 'Usuario 2',
     ),
   ];
+
+  @override
+  Future<void> createTask(TaskModel task) async {
+    tasks.add(task);
+  }
 
   @override
   Future<void> deleteTask(int taskId) async {

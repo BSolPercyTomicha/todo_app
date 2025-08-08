@@ -4,17 +4,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../pages/tasks.page.dart';
 import '../../domain/entities/task.entity.dart';
 import '../../domain/usecases/get_tasks.usecase.dart';
+import '../../domain/usecases/create_task.usecase.dart';
 import '../../domain/usecases/delete_task.usecase.dart';
 
 part 'task.event.dart';
 part 'task.state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
+  final CreateTaskUseCase createTaskUseCase;
   final GetTasksUseCase getTasksUseCase;
   final DeleteTaskUseCase deleteTask;
 
-  TaskBloc(this.getTasksUseCase, this.deleteTask) : super(TaskState.initial()) {
+  TaskBloc(this.createTaskUseCase, this.getTasksUseCase, this.deleteTask)
+      : super(TaskState.initial()) {
     on<GetTasks>(_onGetTasks);
+    on<CreateTask>(_onCreateTask);
     on<DeleteTask>(_onDeleteTask);
   }
 
@@ -63,6 +67,32 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       emit(state.copyWith(
         status: TaskStatus.error,
         errorMessage: 'No se pudo eliminar tarea',
+      ));
+    }
+  }
+
+  Future<void> _onCreateTask(
+    CreateTask event,
+    Emitter<TaskState> emit,
+  ) async {
+    emit(state.copyWith(status: TaskStatus.loading));
+
+    try {
+      int newId = DateTime.now().millisecondsSinceEpoch;
+      final task = TaskEntity(
+        id: newId,
+        title: event.title,
+        description: event.description,
+        tags: event.tags,
+        isCompleted: false,
+        assignedUser: event.assignedUser,
+      );
+      await createTaskUseCase.call(task);
+      add(GetTasks(filter: state.currentFilter));
+    } on Exception {
+      emit(state.copyWith(
+        status: TaskStatus.error,
+        errorMessage: 'No se pudo crear tarea',
       ));
     }
   }

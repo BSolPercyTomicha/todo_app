@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/ia.bloc.dart';
+import '../bloc/task.bloc.dart';
 import '../widgets/typing_text.widget.dart';
 import '../../../../shared/platform_snackbar.dart';
 import '../widgets/selectable_chips_group.widget.dart';
@@ -161,6 +162,16 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
                     PlatformSnackBar.show(context,
                         message:
                             'Es posible que el título de tu tarea haya cambiado. Considera generar una nueva descripción.');
+                  } else {
+                    context.read<TaskBloc>().add(
+                          CreateTask(
+                            title: _titleTask,
+                            description: _description,
+                            tags: _tagsSelected,
+                            assignedUser: _userSelected,
+                          ),
+                        );
+                    Navigator.pop(context);
                   }
                 }
               : null,

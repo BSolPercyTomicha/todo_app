@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/task.bloc.dart';
+import '../pages/task_create.page.dart';
 import '../../domain/entities/task.entity.dart';
 
 class TaskItem extends StatelessWidget {
@@ -30,7 +31,9 @@ class TaskItem extends StatelessWidget {
                       : Colors.white,
                   activeTrackColor:
                       Theme.of(context).colorScheme.primaryContainer,
-                  onChanged: (_) {},
+                  onChanged: (_) {
+                    context.read<TaskBloc>().add(ChangeStatus(task));
+                  },
                 ),
               ],
             ),
@@ -40,7 +43,13 @@ class TaskItem extends StatelessWidget {
         Row(
           children: [
             IconButton.filledTonal(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  TaskCreatePage.routeName,
+                  arguments: task,
+                );
+              },
               icon: const Icon(Icons.edit),
             ),
             IconButton.filledTonal(

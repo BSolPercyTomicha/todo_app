@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'di.dart';
 import 'theme/presentation/bloc/theme.cubit.dart';
+import 'features/task/domain/entities/task.entity.dart';
 import 'features/task/presentation/bloc/task.bloc.dart';
 import 'features/task/presentation/pages/tasks.page.dart';
 import 'features/task/presentation/pages/statistics.page.dart';
@@ -55,7 +56,10 @@ class _MyTodoAppState extends State<MyTodoApp> {
               ),
             ),
             routes: {
-              '/task/create': (context) => const TaskCreatePage(),
+              TaskCreatePage.routeName: (context) => TaskCreatePage(
+                    taskEntity: ModalRoute.of(context)!.settings.arguments
+                        as TaskEntity?,
+                  ),
             },
             home: Scaffold(
               appBar: _selectedIndex == 0
@@ -84,7 +88,10 @@ class _MyTodoAppState extends State<MyTodoApp> {
                     icon: const Icon(Icons.add),
                     label: const Text('Nueva Tarea'),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/task/create');
+                      Navigator.pushNamed(
+                        context,
+                        TaskCreatePage.routeName,
+                      );
                     },
                     tooltip: 'Crear nueva tarea',
                   );

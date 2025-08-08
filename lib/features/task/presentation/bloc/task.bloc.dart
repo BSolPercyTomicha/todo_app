@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../pages/tasks.page.dart';
 import '../../domain/entities/task.entity.dart';
 import '../../domain/usecases/get_tasks.usecase.dart';
+import '../../domain/usecases/update_task.usecase.dart';
 import '../../domain/usecases/create_task.usecase.dart';
 import '../../domain/usecases/delete_task.usecase.dart';
 
@@ -12,13 +13,16 @@ part 'task.state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final CreateTaskUseCase createTaskUseCase;
+  final UpdateTaskUseCase updateTaskUseCase;
   final GetTasksUseCase getTasksUseCase;
   final DeleteTaskUseCase deleteTask;
 
-  TaskBloc(this.createTaskUseCase, this.getTasksUseCase, this.deleteTask)
+  TaskBloc(this.createTaskUseCase, this.updateTaskUseCase, this.getTasksUseCase,
+      this.deleteTask)
       : super(TaskState.initial()) {
+    on<ChangeStatus>(_onChangeStatus);
     on<GetTasks>(_onGetTasks);
-    on<CreateTask>(_onCreateTask);
+    on<SendTask>(_onSendTask);
     on<DeleteTask>(_onDeleteTask);
   }
 
@@ -71,29 +75,49 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     }
   }
 
-  Future<void> _onCreateTask(
-    CreateTask event,
+  Future<void> _onSendTask(
+    SendTask event,
     Emitter<TaskState> emit,
   ) async {
     emit(state.copyWith(status: TaskStatus.loading));
 
     try {
-      int newId = DateTime.now().millisecondsSinceEpoch;
+      int newId =
+          event.id != null ? event.id! : DateTime.now().millisecondsSinceEpoch;
       final task = TaskEntity(
         id: newId,
         title: event.title,
         description: event.description,
         tags: event.tags,
-        isCompleted: false,
+        isCompleted: event.isCompleted,
         assignedUser: event.assignedUser,
       );
-      await createTaskUseCase.call(task);
+      event.id != null
+          ? await updateTaskUseCase.call(task)
+          : await createTaskUseCase.call(task);
       add(GetTasks(filter: state.currentFilter));
     } on Exception {
       emit(state.copyWith(
         status: TaskStatus.error,
-        errorMessage: 'No se pudo crear tarea',
+        errorMessage:
+            'No se pudo ${event.id != null ? 'actualizar' : 'crear'} tarea',
       ));
     }
+  }
+
+  Future<void> _onChangeStatus(
+    ChangeStatus event,
+    Emitter<TaskState> emit,
+  ) async {
+    add(
+      SendTask(
+        id: event.taskEntity.id,
+        title: event.taskEntity.title,
+        description: event.taskEntity.description,
+        isCompleted: !event.taskEntity.isCompleted,
+        tags: event.taskEntity.tags,
+        assignedUser: event.taskEntity.assignedUser,
+      ),
+    );
   }
 }

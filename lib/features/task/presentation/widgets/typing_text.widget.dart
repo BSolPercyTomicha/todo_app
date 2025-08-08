@@ -59,12 +59,14 @@ class _TypingTextState extends State<TypingText> {
         ? '$_displayedText|'
         : _displayedText;
 
-    return Text(
-      fullText,
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
-        fontStyle: FontStyle.italic,
+    return Center(
+      child: Text(
+        fullText,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.primary,
+          fontStyle: FontStyle.italic,
+        ),
       ),
     );
   }

@@ -2,6 +2,7 @@ import '../../models/task.model.dart';
 
 abstract class TaskDataSource {
   Future<void> createTask(TaskModel task);
+  Future<void> updateTask(TaskModel task);
   Future<void> deleteTask(int taskId);
   Future<List<TaskModel>> getTasks();
 }
@@ -12,39 +13,47 @@ class TaskTemporalDataSourceImpl implements TaskDataSource {
       id: 1,
       title: 'Tarea 1',
       description: 'Descripcion 1',
-      tags: ['Tag 1'],
+      tags: ['Personal'],
       isCompleted: false,
-      assignedUser: 'Usuario 1',
+      assignedUser: 'Percy',
     ),
     TaskModel(
       id: 2,
       title: 'Tarea 2',
       description: 'Descripcion 2',
-      tags: ['Tag 2', 'Tag 3'],
+      tags: ['Familia', 'Amigos'],
       isCompleted: false,
-      assignedUser: 'Usuario 2',
+      assignedUser: 'Messi',
     ),
     TaskModel(
       id: 3,
       title: 'Tarea 3',
       description: 'Descripcion 3',
-      tags: ['Tag 2', 'Tag 3'],
+      tags: ['Amigos', 'Personal'],
       isCompleted: true,
-      assignedUser: 'Usuario 1',
+      assignedUser: 'Di Maria',
     ),
     TaskModel(
       id: 4,
-      title: 'Tarea 4',
+      title: 'Universidad',
       description: 'Descripcion 4',
       tags: ['Tag 2', 'Tag 1'],
       isCompleted: true,
-      assignedUser: 'Usuario 2',
+      assignedUser: 'Alexis',
     ),
   ];
 
   @override
   Future<void> createTask(TaskModel task) async {
     tasks.add(task);
+  }
+
+  @override
+  Future<void> updateTask(TaskModel task) async {
+    final index = tasks.indexWhere((t) => t.id == task.id);
+    if (index != -1) {
+      tasks[index] = task;
+    }
   }
 
   @override

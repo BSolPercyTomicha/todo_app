@@ -3,14 +3,34 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/ia.bloc.dart';
 import '../bloc/task.bloc.dart';
 import '../widgets/typing_text.widget.dart';
+import '../../domain/entities/task.entity.dart';
 import '../../../../shared/platform_snackbar.dart';
 import '../widgets/selectable_chips_group.widget.dart';
 
-const _tags = ['Familia', 'Amigos', 'Universidad', 'Trabajo', 'Fiestas'];
-const _users = ['Percy', 'Di Maria', 'Messi', 'Alexis', 'Julián'];
+const _tags = [
+  'Familia',
+  'Personal',
+  'Amigos',
+  'Universidad',
+  'Trabajo',
+  'Fiestas',
+];
+const _users = [
+  'Percy',
+  'Di Maria',
+  'Messi',
+  'Alexis',
+  'Julián',
+];
 
 class TaskCreatePage extends StatefulWidget {
-  const TaskCreatePage({super.key});
+  final TaskEntity? taskEntity;
+  const TaskCreatePage({
+    super.key,
+    this.taskEntity,
+  });
+
+  static const routeName = '/task/create';
 
   @override
   State<TaskCreatePage> createState() => _TaskCreatePageState();
@@ -18,17 +38,32 @@ class TaskCreatePage extends StatefulWidget {
 
 class _TaskCreatePageState extends State<TaskCreatePage> {
   final _titleController = TextEditingController();
-  final List<String> _tagsSelected = [];
+  List<String> _tagsSelected = [];
+  int? _id;
   String _titleTask = '';
   String _description = '';
+  bool _isCompleted = false;
   String _userSelected = '';
   bool _enabled = false;
   bool _showDescription = false;
   bool _isEnabledCreateTaskButton = false;
+  TaskEntity? _taskEntity;
 
   @override
   void initState() {
-    _description = '';
+    _taskEntity = widget.taskEntity;
+    if (_taskEntity != null) {
+      _id = _taskEntity?.id;
+      _titleController.text = _taskEntity!.title;
+      _titleTask = _taskEntity!.title;
+      _description = _taskEntity!.description;
+      _isCompleted = _taskEntity!.isCompleted;
+      _tagsSelected = _taskEntity!.tags;
+      _userSelected = _taskEntity!.assignedUser;
+      _enabled = true;
+      _showDescription = false;
+      _isEnabledCreateTaskButton = true;
+    }
     super.initState();
   }
 
@@ -46,7 +81,8 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
     final bottomPadding = MediaQuery.paddingOf(context).bottom;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Crear Tarea')),
+      appBar: AppBar(
+          title: Text('${_taskEntity == null ? 'Crear' : 'Editar'} Tarea')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -93,6 +129,8 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
               const SizedBox(
                 height: 16,
               ),
+              if (_description.isNotEmpty && !_showDescription)
+                TypingText(text: _description),
               if (_showDescription)
                 BlocConsumer<IABloc, IAState>(
                   listener: (context, state) {
@@ -164,9 +202,11 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
                             'Es posible que el título de tu tarea haya cambiado. Considera generar una nueva descripción.');
                   } else {
                     context.read<TaskBloc>().add(
-                          CreateTask(
+                          SendTask(
+                            id: _id,
                             title: _titleTask,
                             description: _description,
+                            isCompleted: _isCompleted,
                             tags: _tagsSelected,
                             assignedUser: _userSelected,
                           ),
@@ -175,7 +215,7 @@ class _TaskCreatePageState extends State<TaskCreatePage> {
                   }
                 }
               : null,
-          child: const Text('Crear Tarea'),
+          child: Text('${_taskEntity == null ? 'Crear' : 'Actualizar'} Tarea'),
         ),
       ),
     );

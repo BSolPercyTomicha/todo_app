@@ -7,14 +7,24 @@ class GetTasks extends TaskEvent {
   GetTasks({this.filter = TaskFilter.pending});
 }
 
-class CreateTask extends TaskEvent {
+class ChangeStatus extends TaskEvent {
+  final TaskEntity taskEntity;
+  ChangeStatus(this.taskEntity);
+}
+
+class SendTask extends TaskEvent {
+  final int? id;
   final String title;
   final String description;
+  final bool isCompleted;
   final List<String> tags;
   final String assignedUser;
-  CreateTask({
+
+  SendTask({
+    this.id,
     required this.title,
     required this.description,
+    required this.isCompleted,
     required this.tags,
     required this.assignedUser,
   });

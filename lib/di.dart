@@ -6,6 +6,7 @@ import 'features/task/presentation/bloc/ia.bloc.dart';
 import 'features/task/presentation/bloc/task.bloc.dart';
 import 'features/task/domain/repositories/ia.repository.dart';
 import 'features/task/domain/usecases/get_tasks.usecase.dart';
+import 'features/task/domain/usecases/update_task.usecase.dart';
 import 'features/task/domain/usecases/create_task.usecase.dart';
 import 'features/task/domain/usecases/delete_task.usecase.dart';
 import 'features/task/domain/repositories/task.repository.dart';
@@ -24,8 +25,14 @@ void setupDependencies() {
       .registerLazySingleton<TaskRepository>(() => TaskRepositoryImpl(getIt()));
   getIt.registerLazySingleton(() => GetTasksUseCase(getIt()));
   getIt.registerLazySingleton(() => CreateTaskUseCase(getIt()));
+  getIt.registerLazySingleton(() => UpdateTaskUseCase(getIt()));
   getIt.registerLazySingleton(() => DeleteTaskUseCase(getIt()));
-  getIt.registerFactory(() => TaskBloc(getIt(), getIt(), getIt()));
+  getIt.registerFactory(() => TaskBloc(
+        getIt(),
+        getIt(),
+        getIt(),
+        getIt(),
+      ));
   getIt.registerFactory(() => ThemeCubit());
 
   getIt.registerLazySingleton<IAssistantClient>(() => AzureOpenAIClient());

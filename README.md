@@ -29,6 +29,14 @@ git clone git@github.com:BSolPercyTomicha/todo_app.git
 cd todo_app
 ```
 
+Completa los siguientes campos en el archivo `.env` con tus credenciales de Azure OpenAI:
+```bash
+AZURE_OPENAI_API_VERSION=...
+AZURE_OPENAI_ENDPOINT=...
+AZURE_OPENAI_API_KEY=...
+AZURE_OPENAI_DEPLOYMENT_NAME=...
+```
+
 Instala las dependencias del proyecto:
 
 ```bash
@@ -58,6 +66,8 @@ flutter test
 ## 📁 Estructura del Proyecto
 ```bash
 lib/
+├── ia/
+│   └── clients/
 ├── features/
 │   └── task/
 │       ├── data/
@@ -72,19 +82,22 @@ lib/
 │       │   ├── bloc/
 │       │   ├── pages/
 │       │   └── widgets/
+├── shared/
 ├── theme/
 │   └── presentation/
 │       └── bloc/
+test/
 └── app.dart
 └── di.dart
 └── main.dart
 ```
 ## 🎨 Funcionalidades
-- Crear nuevas tareas
 - Filtrar por: Pendientes, Todas o Completadas
 - Ver estadísticas de tareas
 - Cambiar entre tema claro y oscuro
 - Navegación entre pantallas
+- Crear nuevas tareas
+- Generación automática de descripciones para tareas mediante IA
 
 
 ## 🧑‍💻 Autor

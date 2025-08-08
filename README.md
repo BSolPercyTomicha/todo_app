@@ -1,6 +1,6 @@
 # 📝 Todo App
 
-Una aplicación Flutter para gestionar tareas pendientes. Incluye funciones como filtros, creación de tareas, estadísticas, y soporte para temas claro/oscuro.
+Una aplicación Flutter para gestionar tareas. Incluye funciones como listado de tareas más filtro entre pendientes y completas, creación de tareas con asistencia de IA, editar tareas, eliminar tareas, estadísticas y soporte para temas claro/oscuro.
 
 Funciona tanto en dispositivos Android e IOS.
 
@@ -92,7 +92,9 @@ test/
 └── main.dart
 ```
 ## 🎨 Funcionalidades
+- Listado de tareas
 - Filtrar por: Pendientes, Todas o Completadas
+- Editar y eliminar tareas
 - Ver estadísticas de tareas
 - Cambiar entre tema claro y oscuro
 - Navegación entre pantallas

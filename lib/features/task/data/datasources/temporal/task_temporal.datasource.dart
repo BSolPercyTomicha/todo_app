@@ -23,7 +23,7 @@ class TaskTemporalDataSourceImpl implements TaskDataSource {
       description: 'Descripcion 2',
       tags: ['Familia', 'Amigos'],
       isCompleted: false,
-      assignedUser: 'Messi',
+      assignedUser: 'Percy',
     ),
     TaskModel(
       id: 3,
@@ -31,7 +31,7 @@ class TaskTemporalDataSourceImpl implements TaskDataSource {
       description: 'Descripcion 3',
       tags: ['Amigos', 'Personal'],
       isCompleted: true,
-      assignedUser: 'Di Maria',
+      assignedUser: 'Messi',
     ),
     TaskModel(
       id: 4,
@@ -39,7 +39,7 @@ class TaskTemporalDataSourceImpl implements TaskDataSource {
       description: 'Descripcion 4',
       tags: ['Tag 2', 'Tag 1'],
       isCompleted: true,
-      assignedUser: 'Alexis',
+      assignedUser: 'Messi',
     ),
   ];
 

@@ -10,63 +10,38 @@ class StatisticsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 60,
-        ),
-        BlocBuilder<TaskBloc, TaskState>(
-          builder: (context, state) {
-            if (state.status == TaskStatus.initial) {
-              context.read<TaskBloc>().add(GetTasks(filter: TaskFilter.all));
-            }
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 60,
+          ),
+          BlocBuilder<TaskBloc, TaskState>(
+            builder: (context, state) {
+              if (state.status == TaskStatus.initial) {
+                context.read<TaskBloc>().add(GetTasks(filter: TaskFilter.all));
+              }
 
-            if (state.status != TaskStatus.success) {
-              return const Column(
-                children: [
-                  Text('Total(0)'),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  StatisticsCharts(
-                    completedTasks: 0,
-                    totalTasks: 0,
-                  ),
-                ],
-              );
-            }
+              if (state.status != TaskStatus.success) {
+                return const Column(
+                  children: [
+                    Text('Total(0)'),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    StatisticsCharts(
+                      completedTasks: 0,
+                      totalTasks: 0,
+                    ),
+                  ],
+                );
+              }
 
-            return Column(
-              children: [
-                Text(
-                  'Cantidad de total de tareas : ${state.totalTasks} ',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                StatisticsCharts(
-                  completedTasks: state.completedTasks,
-                  totalTasks: state.totalTasks,
-                ),
-              ],
-            );
-          },
-        ),
-        const SizedBox(
-          height: 48,
-        ),
-        BlocBuilder<TaskBloc, TaskState>(
-          builder: (context, state) {
-            if (state.status == TaskStatus.success) {
               return Column(
                 children: [
-                  const Text(
-                    'Porcentajes de tareas completadas por usuario:',
-                    style: TextStyle(
+                  Text(
+                    'Cantidad de total de tareas : ${state.totalTasks} ',
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -74,42 +49,69 @@ class StatisticsPage extends StatelessWidget {
                   const SizedBox(
                     height: 24,
                   ),
-                  ...state.userStats
-                      .map(
-                        (userStats) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              userStats.userName,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
-                              ),
-                            ),
-                            PreviewStatisticsInfo(
-                              completedTasks: userStats.completed,
-                              totalTasks: userStats.total,
-                            ),
-                            const SizedBox(
-                              height: 12,
-                            ),
-                          ],
-                        ),
-                      )
-                      .toList(),
+                  StatisticsCharts(
+                    completedTasks: state.completedTasks,
+                    totalTasks: state.totalTasks,
+                  ),
                 ],
               );
-            }
-            return const Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Text('No existen datos aún'),
-            );
-          },
-        ),
-      ],
+            },
+          ),
+          const SizedBox(
+            height: 48,
+          ),
+          BlocBuilder<TaskBloc, TaskState>(
+            builder: (context, state) {
+              if (state.status == TaskStatus.success) {
+                return Column(
+                  children: [
+                    const Text(
+                      'Porcentajes de tareas completadas por usuario:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    ...state.userStats
+                        .map(
+                          (userStats) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                userStats.userName,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                ),
+                              ),
+                              PreviewStatisticsInfo(
+                                completedTasks: userStats.completed,
+                                totalTasks: userStats.total,
+                              ),
+                              const SizedBox(
+                                height: 12,
+                              ),
+                            ],
+                          ),
+                        )
+                        .toList(),
+                  ],
+                );
+              }
+              return const Padding(
+                padding: EdgeInsets.all(32.0),
+                child: Text('No existen datos aún'),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

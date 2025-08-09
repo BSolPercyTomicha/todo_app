@@ -79,9 +79,11 @@ class _MyTodoAppState extends State<MyTodoApp> {
                     )
                   : null,
               body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: _pages[_selectedIndex],
-              ),
+                  padding: const EdgeInsets.all(16.0),
+                  child: IndexedStack(
+                    index: _selectedIndex,
+                    children: _pages,
+                  )),
               floatingActionButton: Builder(
                 builder: (context) {
                   return FloatingActionButton.extended(

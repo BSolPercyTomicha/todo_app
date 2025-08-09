@@ -9,12 +9,14 @@ class TaskState extends Equatable {
   final int completedTasks;
   final int totalTasks;
   final String? errorMessage;
+  final List<UserTaskStatsEntity> userStats;
 
   const TaskState({
     required this.tasks,
     required this.currentFilter,
     required this.completedTasks,
     required this.totalTasks,
+    required this.userStats,
     this.status = TaskStatus.initial,
     this.errorMessage,
   });
@@ -25,6 +27,7 @@ class TaskState extends Equatable {
         completedTasks: 0,
         totalTasks: 0,
         status: TaskStatus.initial,
+        userStats: [],
       );
 
   TaskState copyWith({
@@ -34,6 +37,7 @@ class TaskState extends Equatable {
     int? totalTasks,
     TaskStatus? status,
     String? errorMessage,
+    List<UserTaskStatsEntity>? userStats,
   }) {
     return TaskState(
       tasks: tasks ?? this.tasks,
@@ -42,6 +46,7 @@ class TaskState extends Equatable {
       totalTasks: totalTasks ?? this.totalTasks,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
+      userStats: userStats ?? this.userStats,
     );
   }
 
@@ -53,5 +58,6 @@ class TaskState extends Equatable {
         totalTasks,
         status,
         errorMessage,
+        userStats,
       ];
 }

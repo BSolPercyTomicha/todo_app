@@ -7,6 +7,7 @@ import '../../domain/usecases/get_tasks.usecase.dart';
 import '../../domain/usecases/update_task.usecase.dart';
 import '../../domain/usecases/create_task.usecase.dart';
 import '../../domain/usecases/delete_task.usecase.dart';
+import '../../domain/entities/user_task_stats.entity.dart';
 
 part 'task.event.dart';
 part 'task.state.dart';
@@ -24,6 +25,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<GetTasks>(_onGetTasks);
     on<SendTask>(_onSendTask);
     on<DeleteTask>(_onDeleteTask);
+    on<GetUserStats>(_onGetUserStats);
   }
 
   Future<void> _onGetTasks(
@@ -44,6 +46,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         totalTasks: tasks.length,
         tasks: filteredTasks,
       ));
+      add(GetUserStats());
     } on Exception {
       emit(state.copyWith(
         status: TaskStatus.error,
@@ -119,5 +122,49 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         assignedUser: event.taskEntity.assignedUser,
       ),
     );
+  }
+
+  Future<void> _onGetUserStats(
+    GetUserStats event,
+    Emitter<TaskState> emit,
+  ) async {
+    emit(state.copyWith(status: TaskStatus.loading));
+
+    try {
+      final tasks = await getTasksUseCase.call();
+
+      final Map<String, UserTaskStatsEntity> tempStats = {};
+
+      for (final task in tasks) {
+        if (task.assignedUser.isNotEmpty) {
+          final user = task.assignedUser;
+          final existing = tempStats[user];
+
+          if (existing == null) {
+            tempStats[user] = UserTaskStatsEntity(
+              userName: user,
+              completed: task.isCompleted ? 1 : 0,
+              total: 1,
+            );
+          } else {
+            tempStats[user] = UserTaskStatsEntity(
+              userName: user,
+              completed: existing.completed + (task.isCompleted ? 1 : 0),
+              total: existing.total + 1,
+            );
+          }
+        }
+      }
+
+      emit(state.copyWith(
+        status: TaskStatus.success,
+        userStats: tempStats.values.toList(),
+      ));
+    } on Exception {
+      emit(state.copyWith(
+        status: TaskStatus.error,
+        errorMessage: 'No se pudieron obtener las estadísticas de usuarios',
+      ));
+    }
   }
 }

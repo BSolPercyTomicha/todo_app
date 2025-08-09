@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'tasks.page.dart';
 import '../bloc/task.bloc.dart';
 import '../widgets/statistics_charts.widget.dart';
+import '../widgets/preview_statistics_info.widget.dart';
 
 class StatisticsPage extends StatelessWidget {
   const StatisticsPage({super.key});
@@ -52,6 +53,59 @@ class StatisticsPage extends StatelessWidget {
                   totalTasks: state.totalTasks,
                 ),
               ],
+            );
+          },
+        ),
+        const SizedBox(
+          height: 48,
+        ),
+        BlocBuilder<TaskBloc, TaskState>(
+          builder: (context, state) {
+            if (state.status == TaskStatus.success) {
+              return Column(
+                children: [
+                  const Text(
+                    'Porcentajes de tareas completadas por usuario:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  ...state.userStats
+                      .map(
+                        (userStats) => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              userStats.userName,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
+                              ),
+                            ),
+                            PreviewStatisticsInfo(
+                              completedTasks: userStats.completed,
+                              totalTasks: userStats.total,
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList(),
+                ],
+              );
+            }
+            return const Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Text('No existen datos aún'),
             );
           },
         ),

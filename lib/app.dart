@@ -18,7 +18,7 @@ class MyTodoApp extends StatefulWidget {
 class _MyTodoAppState extends State<MyTodoApp> {
   int _selectedIndex = 0;
   final List<String> _titles = ['Mis Tareas', 'Mis Estadísticas'];
-  final List<Widget> _pages = const [
+  final List<Widget> _pages = [
     TasksPage(),
     StatisticsPage(),
   ];

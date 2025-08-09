@@ -18,10 +18,6 @@ class StatisticsPage extends StatelessWidget {
           ),
           BlocBuilder<TaskBloc, TaskState>(
             builder: (context, state) {
-              if (state.status == TaskStatus.initial) {
-                context.read<TaskBloc>().add(GetTasks(filter: TaskFilter.all));
-              }
-
               if (state.status != TaskStatus.success) {
                 return const Column(
                   children: [
